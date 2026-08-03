@@ -1,8 +1,13 @@
 class Transform {
     constructor(position, scale, rotation) {
+        this.defaultScale = 5; // TODO: fix to not need this... something something to do with parent child scaling/decaying exponentially
         this.vector2D = new Vector2D(position?.x ?? 0, position?.y ?? 0);
-        this.scale2D = new Scale2D(scale?.x ?? 5, scale?.y ?? 5);
+        this.scale2D = new Scale2D(scale?.x ?? this.defaultScale, scale?.y ?? this.defaultScale); // Set to 5 during testing, accidentally built some systems around it using that number. Will fix eventually
         this.rotation2D = new Rotation2D(rotation?.rot ?? 0);
+
+        this.position = this.vector2D.position;
+        this.scale = this.scale2D.scale;
+        this.rotation = this.rotation2D.rotation;
 
         this.isStatic = false;
 
@@ -101,8 +106,8 @@ class Transform {
     getGlobalScale() {
         if (this.parent) {
             return {
-                x: this.parent.getGlobalScale().x * this.scale2D.scale.x / 5,
-                y: this.parent.getGlobalScale().y * this.scale2D.scale.y / 5
+                x: this.parent.getGlobalScale().x * this.scale2D.scale.x / this.defaultScale,
+                y: this.parent.getGlobalScale().y * this.scale2D.scale.y / this.defaultScale
             };
         }
         return {
@@ -126,24 +131,29 @@ class Transform {
 
     getCardinalDirection(angle = null) {
         if (!angle) {
-            //angle = this.rotation2D.getRotDeg();
             angle = this.getGlobalRotation().deg;
         }
-        angle = (angle + 360) % 360;
+        angle = (angle + 360) % 360; // Angles under or over 360 converted to 0 - 360 range;
 
-        // Define cardinal directions and their corresponding angle ranges
-        const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-        const angleRanges = [22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5];
+        // 8 Cardinal directions and their ranges in Degrees
+        const directions = [
+            { direction: "N", name: "North", startAngle: -22.5, endAngle: 22.5 },
+            { direction: "NE", name: "North East", startAngle: 22.5, endAngle: 67.5 },
+            { direction: "E", name: "East", startAngle: 67.5, endAngle: 112.5 },
+            { direction: "SE", name: "South East", startAngle: 112.5, endAngle: 157.5 },
+            { direction: "S", name: "South", startAngle: 157.5, endAngle: 202.5 },
+            { direction: "SW", name: "South West", startAngle: 202.5, endAngle: 247.5 },
+            { direction: "W", name: "West", startAngle: 247.5, endAngle: 292.5 },
+            { direction: "NW", name: "North West", startAngle: 292.5, endAngle: 337.5 },
+        ]
 
-        // Determine the cardinal direction based on the angle
         for (let i = 0; i < directions.length; i++) {
-            if (angle < angleRanges[i]) {
+            if (angle > directions[i].startAngle && angle < directions[i].endAngle) {
                 return directions[i];
             }
         }
 
-        // If the angle is between 337.5 and 360 or 0 and 22.5, it corresponds to 'N'
-        return 'N';
+        return 'N'; // Default
     }
 
     moveToward(targetX, targetY, speed) {
@@ -151,6 +161,8 @@ class Transform {
         const dx = targetX - transform.position.x;
         const dy = targetY - transform.position.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
+
+        speed ?? distance;
 
         if (distance > 0) {
             const ratio = Math.min(speed / distance, 1);
@@ -164,6 +176,8 @@ class Transform {
         const dx = Math.cos(radian) * distance;
         const dy = Math.sin(radian) * distance;
 
+        speed ?? distance;
+
         const ratio = speed / distance;
         this.vector2D.position.x += dx * ratio;
         this.vector2D.position.y += dy * ratio;
@@ -173,6 +187,8 @@ class Transform {
         const radian = this.rotation2D.getRotRad() + Math.PI / 2;
         const dx = Math.cos(radian) * distance;
         const dy = Math.sin(radian) * distance;
+        
+        speed ?? distance;
 
         const ratio = speed / distance;
         this.vector2D.position.x += dx * ratio;
@@ -182,33 +198,22 @@ class Transform {
     draw(ctx) {
         if (!this.inView) return;
         
+        ctx.beginPath();
+        ctx.lineWidth = 0.2;
+        ctx.strokeStyle = this.color;
+
         switch (this.type) {
             case "rectangle":
-                ctx.beginPath();
-                ctx.lineWidth = 0.2;
-                ctx.strokeStyle = this.color;
                 ctx.rect(-2, -2, 4, 4);
-                ctx.stroke();
                 break;
         
             case "circle":
-                ctx.beginPath();
-                ctx.lineWidth = 0.2;
-                ctx.strokeStyle = this.color;
-
                 ctx.arc(0, 0, 2, 0, 2 * Math.PI);
-                
-                ctx.stroke();
                 break;
             default:
                 break;
         }
-        
-        // ctx.rotate(-this.getGlobalRotation().rot);
-        // const size = 1.5
-        // const text = this.gameObject.name;
-        // ctx.font = `${size}px serif`;
-        // ctx.fillStyle = "green";
-        // ctx.fillText(text, -text.length / 2 * size / 2, -4);
+
+        ctx.stroke();
     }
 }
