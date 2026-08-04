@@ -1,3 +1,5 @@
+let test = 0;
+
 class Collider extends Component {
     constructor() {
         super('Collider');
@@ -51,7 +53,7 @@ class Collider extends Component {
             const objCollider = object.getComponent("Collider");
             if (objCollider) {
                 const objTransform = object.transform.getGlobalTransform();
-                let closestPoint = this.getClosestPoint(objTransform, objCollider.type);
+                let closestPoint = this.getClosestPoint(objTransform, objCollider, objCollider.type);
 
                 if (this.inBounds(closestPoint)) {
                     this.transform.color = 'red';
@@ -63,8 +65,26 @@ class Collider extends Component {
         });
     }
 
+    intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
+        if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) return false;
+
+        const denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
+
+        if (denominator === 0) return false; // Lines are parallel
+
+        let ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator
+        let ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
+
+        if (ua < 0 || ua > 1 || ub < 0 || ub > 1) return false; // is the intersection along the segments
+
+        let x = x1 + ua * (x2 - x1)
+        let y = y1 + ua * (y2 - y1)
+
+        return { x, y }
+    }
+
     // TODO: get from class: (transform, type = "sqaure") -> (collider): collider.getClosestPoint(x, y)
-    getClosestPoint(transform, type = "rectangle") {
+    getClosestPoint(transform, collider, type = "rectangle") {
         let closestPoint = new Vector2D(transform.position.x, transform.position.y);
 
         switch (type) {
@@ -83,7 +103,21 @@ class Collider extends Component {
                 break;
                 
             case "rectangle":
-                closestPoint = new Vector2D(transform.position.x, transform.position.y); 
+                // const point = new Vector2D(this.x, this.y) // Point of this object
+                // const objPoint = new Vector2D(transform.position.x, transform.position.y); // Point of other object
+                // for (let i = 0; i < collider.points.length; i++) {
+                //     const linePointA = collider.points[i].clone()
+                //     const linePointB = collider.points[(i + 1) % collider.points.length].clone() // % x loops back so last point and first point can connect
+
+                //     //if ( objPoint.x, objPoint.y )
+                //     // closestPoint = linePointA;
+                    
+
+                //     // const intersect = this.intersect(point.x, point.y, objPoint.x, objPoint.y, linePointA.x, linePointA.y, linePointB.x, linePointB.y)
+                //     // if (intersect) {
+                //     //     closestPoint = intersect;
+                //     // }
+                // }
                 break;
         
             default:
