@@ -1,5 +1,3 @@
-let test = 0;
-
 class Collider extends Component {
     constructor() {
         super('Collider');
