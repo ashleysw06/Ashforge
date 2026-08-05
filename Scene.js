@@ -2,7 +2,6 @@ class Scene {
     constructor() {
         this.objects = [];
         this.queue = [];
-        this.game = null;
     }
 
     getObjectByName(name) {
@@ -16,9 +15,8 @@ class Scene {
     addObject(object) {
         object.transform.scene = this;
         object.scene = this;
-        if (this.game && this.game.isRunning) {
-            object.start();
-        }
+        object.start();
+        
         this.objects.push(object);
     }
 

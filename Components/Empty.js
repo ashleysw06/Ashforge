@@ -1,3 +1,4 @@
+// Base Class. For reference. May or may not ship with engine
 class Empty extends Component {
     constructor() {
         super('ComponentName');

@@ -1,3 +1,5 @@
+const debug = new Debug();
+
 class Engine {
     constructor() {
         debug.log("Engine.Create: Detecting canvas...");
@@ -194,12 +196,11 @@ class Engine {
 
         this.scene.sort((a, b) => a.transform.vector2D.position.y - b.transform.vector2D.position.y);
         this.ctx.save();
-        if (game) {
-            this.ctx.translate(
-                -this.screenX + this.screenRight / 2,
-                -this.screenY + this.screenBottom / 2
-            );
-        }
+        // Removed if (game)
+        this.ctx.translate(
+            -this.screenX + this.screenRight / 2,
+            -this.screenY + this.screenBottom / 2
+        );
         
         this.ctx.fillStyle = this.img;
         this.ctx.fillRect(this.screenX - this.screenRight / 2, this.screenY - this.screenBottom / 2, this.screenRight, this.screenBottom);

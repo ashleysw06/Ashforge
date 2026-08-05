@@ -33,7 +33,7 @@ class Collider extends Component {
         this.h = transform.scale.y * 2;
         this.r = transform.scale.x + transform.scale.y;
 
-        if (this.inBounds(new Vector2D(game.engine.worldSpaceMouseX, game.engine.worldSpaceMouseY))) {
+        if (this.inBounds(new Vector2D(engine.worldSpaceMouseX, engine.worldSpaceMouseY))) {
             this.transform.color = 'red';
         }
     }

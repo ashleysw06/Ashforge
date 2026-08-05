@@ -1,3 +1,4 @@
+// Expirimental Class. For testing. Won't ship with engine outside of Examples
 class ProjectileController extends Component {
     constructor(originPoint, targetPoint) {
         super('ProjectileController');

@@ -10,6 +10,8 @@ class Interactable extends Component {
         this.inRange = false;
 
         this.callbacks = [];
+
+        this.interactionKey = 'e';
     }
 
     start() {
@@ -31,6 +33,24 @@ class Interactable extends Component {
             }
         });
     }
+    
+    createCallback(action, subAction, mouse, key, general, addToCallBacks = false) {
+        mouse += 1; // normal: 0 - 2 | 0 returns false | + 1 for `if (mouse)` conditions
+
+        const callback = {
+            action: action,
+            subAction: subAction,
+            mouse: mouse || null,
+            key: key || null,
+            general: general || mouse || key
+        }
+
+        if (addToCallBacks) {
+            this.callback(callback);
+        }
+
+        return callback;
+    }
 
     onInteraction(callback) {
         this.callbacks.push(callback);
@@ -43,31 +63,28 @@ class Interactable extends Component {
     }
 
     _onKeyDown(event) {
-        if (this.callback && event.key == "e" && this.inRange) {
-            this.callback({
-                action: "key",
-                mouse: null,
-                key: event.key,
-                general: event.button + 1 || event.key
-            });
+        if (this.callback && event.key == this.interactionKey && this.inRange) {
+            this.createCallback("key", "keyDown", null, event.key, null, true)
         }
     }
 
     _onKeyUp(event) {
+        if (this.callback && event.key == this.interactionKey && this.inRange) {
+            this.createCallback("key", "keyUp", null, event.key, null, true)
+        }
     }
 
     _onMouseDown(event) {
-        const cursorPosition = new Vector2D(game.engine.worldSpaceMouseX, game.engine.worldSpaceMouseY);
+        const cursorPosition = new Vector2D(engine.worldSpaceMouseX, engine.worldSpaceMouseY);
         if (this.callback && this.collider.inBounds(cursorPosition) && this.inRange) {
-            this.callback({
-                action: "click",
-                mouse: event.button + 1,
-                key: null,
-                general: event.button + 1 || event.key
-            });
+            this.createCallback("click", "mouseDown", event.button, null, null, true)
         }
     }
 
     _onMouseUp(event) {
+        const cursorPosition = new Vector2D(engine.worldSpaceMouseX, engine.worldSpaceMouseY);
+        if (this.callback && this.collider.inBounds(cursorPosition) && this.inRange) {
+            this.createCallback("click", "mouseUp", event.button, null, null, true)
+        }
     }
 }

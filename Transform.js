@@ -25,11 +25,11 @@ class Transform {
     update(deltaTime) {
         const transform = this.getGlobalTransform();
         const lntInView = // Left and Top
-            (Math.abs(transform.position.x - transform.scale.x * 2 - game.engine.screenX) < game.engine.screenRight / 2) || 
-            (Math.abs(transform.position.y - transform.scale.x * 2 - game.engine.screenY) < game.engine.screenBottom / 2);
+            (Math.abs(transform.position.x - transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2) || 
+            (Math.abs(transform.position.y - transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2);
         const rnbInView = // Right and Bottom
-            (Math.abs(transform.position.x + transform.scale.x * 2 - game.engine.screenX) < game.engine.screenRight / 2) || 
-            (Math.abs(transform.position.y + transform.scale.x * 2 - game.engine.screenY) < game.engine.screenBottom / 2);
+            (Math.abs(transform.position.x + transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2) || 
+            (Math.abs(transform.position.y + transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2);
         this.inView = lntInView || rnbInView;
     }
 
