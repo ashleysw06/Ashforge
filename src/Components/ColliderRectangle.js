@@ -61,12 +61,14 @@ export default class ColliderRectangle extends Collider {
             let ty = transform.position.y;
             let push = 100;
 
-            if (Math.abs(xDiff) / transform.scale.x > Math.abs(yDiff) / transform.scale.y) { // FOR TOP AND BOTTOM: Math.abs(xDiff) / transform.scale.x < Math.abs(yDiff) / transform.scale.y
+            if (Math.abs(xDiff) / transform.scale.x > Math.abs(yDiff) / transform.scale.y) {
                 push = transform.scale.x / xDiff
+                // push = ( yDiff / this.transform.defaultScale + transform.scale.y / 2 )
                 x -= push
                 tx += push
             } else {
                 push = transform.scale.y / yDiff
+                // push = ( yDiff / this.transform.defaultScale + transform.scale.y / 2 )
                 y -= push
                 ty += push
             }

@@ -24,8 +24,10 @@ export default class ColliderCircle extends Collider {
 
         this.forEachObject((object, data) => {
             const push = this.r / this.gameObject.distance(object);
-            object.transform.moveToward(transform.position.x, transform.position.y, -push)
-            this.transform.moveToward(data.objTransform.position.x, data.objTransform.position.y, -push)
+            // const push = this.r / 2 - this.gameObject.distance(object) / 2;
+            
+            object.transform.moveToward(transform.position.x, transform.position.y, -push / 2)
+            this.transform.moveToward(data.objTransform.position.x, data.objTransform.position.y, -push / 2)
         })
     }
 }
