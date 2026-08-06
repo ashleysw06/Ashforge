@@ -1,3 +1,4 @@
+// Expirimental Class. For testing. Won't ship with engine outside of Examples
 class ResourceHandler extends Component {
     constructor() {
         super('ResourceHandler');
