@@ -11,9 +11,33 @@ export default class Scene {
     getObjectsWithTag(tag) {
         return this.objects.filter(object => object.tags.indexOf(tag) > -1);
     }
+
+    getObjectsWithTags(tags) {
+        return this.objects.filter(object => {
+            for (let i = 0; i < tags.length; i++) {
+                const tag = tags[i];
+                if (object.tags.indexOf(tag) > -1) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
     
     getObjectsWithoutTag(tag) {
         return this.objects.filter(object => object.tags.indexOf(tag) == -1);
+    }
+    
+    getObjectsWithoutTags(tags) {
+        return this.objects.filter(object => {
+            for (let i = 0; i < tags.length; i++) {
+                const tag = tags[i];
+                if (object.tags.indexOf(tag) > -1) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     addObject(object) {
