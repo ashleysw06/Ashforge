@@ -4,7 +4,7 @@ import Object from '/src/Object.js';
 window._gov = {
     isRunning: false
 };
-
+window._temps = {};
 export default class Engine {
     constructor(canvas, ctx) {
         this.canvas = canvas;
@@ -242,15 +242,11 @@ export default class Engine {
             }
             this.ctx.restore();
         });
-        this.drawCursor();
+        this.drawWorldCursor(mouse.world);
         this.ctx.restore();
 
         if (this.debug && this.isDragging) {
-            this.ctx.beginPath();
-            this.ctx.strokeStyle = 'red'
-            this.ctx.moveTo(mouse.screen.lastX, mouse.screen.lastY);
-            this.ctx.lineTo(mouse.screen.dragX, mouse.screen.dragY);
-            this.ctx.stroke();
+            this.drawScreenCursor(mouse.screen)
         }
     }
 
@@ -270,12 +266,19 @@ export default class Engine {
         this.ctx.fillText(`FPS: ${avgFps.toFixed(decimalPlaces)}`, position.x, this.screenBottom - ( fontSize / 2 ) - position.y);
     }
 
-    drawCursor() {
-        const mouse = window._mouse.world;
+    drawWorldCursor(mouse) {
         this.ctx.fillStyle = 'black';
         this.ctx.save();
         this.ctx.translate(mouse.x, mouse.y);
         this.ctx.fillRect(-5, -5, 10, 10);
         this.ctx.restore();
+    }
+
+    drawScreenCursor(mouse) {
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = 'red'
+        this.ctx.moveTo(mouse.lastX, mouse.lastY);
+        this.ctx.lineTo(mouse.dragX, mouse.dragY);
+        this.ctx.stroke();
     }
 }
