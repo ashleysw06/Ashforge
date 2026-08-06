@@ -8,14 +8,18 @@ export default class Scene {
         return this.objects.find(object => object.name === name);
     }
 
-    getObjectsByTag(tag) {
+    getObjectsWithTag(tag) {
         return this.objects.filter(object => object.tags.indexOf(tag) > -1);
     }
     
+    getObjectsWithoutTag(tag) {
+        return this.objects.filter(object => object.tags.indexOf(tag) > -1);
+    }
+
     addObject(object) {
         object.transform.scene = this;
         object.scene = this;
-        
+
         if (window._gov.isRunning) object.start();
         
         this.objects.push(object);
