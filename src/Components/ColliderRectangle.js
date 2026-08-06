@@ -1,4 +1,8 @@
-class ColliderRectangle extends Collider {
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+import Collider from '/src/Components/Collider.js';
+
+export default class ColliderRectangle extends Collider {
     constructor() {
         super('Collider');
         this.type = "rectangle";

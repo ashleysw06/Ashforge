@@ -1,4 +1,6 @@
-class Object {
+import Transform from './Transform.js';
+
+export default class Object {
     constructor(name, components) {
         this.name = name;
         this.tags = [];
@@ -75,6 +77,8 @@ class Object {
     }
 
     draw(ctx) {
+        if (!this.transform.inView) return;
+        
         ctx.fillRect(-2, -2, 4, 4);
 
         this.drawOns.forEach(drawOn => {

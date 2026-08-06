@@ -1,4 +1,4 @@
-class Vector2D {
+export default class Vector2D {
     constructor(x, y) {
         this.position = { x: x, y: y };
         this.x = this.position.x;

@@ -1,4 +1,7 @@
-class Interactable extends Component {
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+
+export default class Interactable extends Component {
     constructor(tag) {
         super('Interactable');
         this.requireComponent("Collider");
@@ -34,7 +37,7 @@ class Interactable extends Component {
         });
     }
     
-    createCallback(action, subAction, mouse, key, general, addToCallBacks = false) {
+    createCallback(action, subAction, mouse, key, general, call = false) {
         mouse += 1; // normal: 0 - 2 | 0 returns false | + 1 for `if (mouse)` conditions
 
         const callback = {
@@ -45,7 +48,7 @@ class Interactable extends Component {
             general: general || mouse || key
         }
 
-        if (addToCallBacks) {
+        if (call) {
             this.callback(callback);
         }
 
@@ -75,14 +78,16 @@ class Interactable extends Component {
     }
 
     _onMouseDown(event) {
-        const cursorPosition = new Vector2D(engine.worldSpaceMouseX, engine.worldSpaceMouseY);
+        const mouse = window._mouse.world;
+        const cursorPosition = new Vector2D(mouse.x, mouse.y);
         if (this.callback && this.collider.inBounds(cursorPosition) && this.inRange) {
             this.createCallback("click", "mouseDown", event.button, null, null, true)
         }
     }
 
     _onMouseUp(event) {
-        const cursorPosition = new Vector2D(engine.worldSpaceMouseX, engine.worldSpaceMouseY);
+        const mouse = window._mouse.world;
+        const cursorPosition = new Vector2D(mouse.x, mouse.y);
         if (this.callback && this.collider.inBounds(cursorPosition) && this.inRange) {
             this.createCallback("click", "mouseUp", event.button, null, null, true)
         }

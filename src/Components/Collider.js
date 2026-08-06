@@ -1,4 +1,7 @@
-class Collider extends Component {
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+
+export default class Collider extends Component {
     constructor() {
         super('Collider');
         this.type = "undef"
@@ -24,6 +27,8 @@ class Collider extends Component {
     }
 
     updateCollisionData(transform) {
+        const mouse = window._mouse.world;
+
         this.transform.color = 'blue';
         this.x = transform.position.x;
         this.y = transform.position.y;
@@ -31,15 +36,15 @@ class Collider extends Component {
         this.h = transform.scale.y * 2;
         this.r = transform.scale.x + transform.scale.y;
 
-        if (this.inBounds(new Vector2D(engine.worldSpaceMouseX, engine.worldSpaceMouseY))) {
+        if (this.inBounds(new Vector2D(mouse.x, mouse.y))) {
             this.transform.color = 'red';
         }
     }
 
-    // inBounds(vector2D) {
-    //     const dist = Math.abs(vector2D.x - this.transform.vector2D.position.x) + Math.abs(vector2D.y - this.transform.vector2D.position.y)
-    //     return dist < this.r
-    // }
+    inBounds(vector2D) {
+        const dist = Math.abs(vector2D.x - this.transform.position.x) + Math.abs(vector2D.y - this.transform.position.y)
+        return dist < this.r * 2
+    }
 
     forEachObject(script) {
         this.scene.objects.forEach(object => {
@@ -51,6 +56,10 @@ class Collider extends Component {
             const objCollider = object.getComponent("Collider");
             if (objCollider) {
                 const objTransform = object.transform.getGlobalTransform();
+
+                const dist = Math.abs(objTransform.x - this.transform.position.x) + Math.abs(objTransform.y - this.transform.position.y)
+                if(dist > ( this.r + objCollider.r )) return;
+
                 let closestPoint = this.getClosestPoint(objTransform, objCollider, objCollider.type);
 
                 if (this.inBounds(closestPoint)) {

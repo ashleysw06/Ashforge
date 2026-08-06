@@ -1,5 +1,7 @@
-// Expirimental Class. For testing. Won't ship with engine outside of Examples... Without heavy redesign and more general use
-class PlayerController extends Component {
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+
+export default class PlayerController extends Component {
     constructor() {
         super('PlayerController');
 
@@ -21,10 +23,10 @@ class PlayerController extends Component {
     }
 
     update(deltaTime) {
-        super.update(deltaTime);
+        const mouse = window._mouse.world;
 
-        const xDistance = this.transform.position.x - engine.worldSpaceMouseX;
-        const yDistance = this.transform.position.y - engine.worldSpaceMouseY;
+        const xDistance = this.transform.position.x - mouse.x;
+        const yDistance = this.transform.position.y - mouse.y;
         const angle = Math.atan2(yDistance, xDistance) * (180 / Math.PI);
         this.transform.rotation2D.setRotDeg(angle);
 

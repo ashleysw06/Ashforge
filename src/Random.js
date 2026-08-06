@@ -1,4 +1,4 @@
-class Random {
+export class Random {
     Chance(percentage) {
         return ( Math.random() * 100 < percentage );
     }

@@ -1,5 +1,7 @@
-// Base Class. For reference. May or may not ship with engine
-class Empty extends Component {
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+
+export default class Empty extends Component {
     constructor() {
         super('ComponentName');
     }
