@@ -96,12 +96,12 @@ export default class Transform {
             const s = Math.sin(radians);
             const c = Math.cos(radians);
 
-            const xnew = -this.position.x * c - this.position.y * s;
-            const ynew = -this.position.x * s + this.position.y * c;
+            const xnew = this.vector2D.position.x * c - this.vector2D.position.y * s;
+            const ynew = -this.vector2D.position.x * s + this.vector2D.position.y * c;
 
             return { 
-                x: -xnew + parentPosition.x, 
-                y: -ynew + parentPosition.y 
+                x: xnew + parentPosition.x, 
+                y: ynew + parentPosition.y 
             };
         }
         return { 
