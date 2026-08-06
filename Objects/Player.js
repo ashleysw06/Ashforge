@@ -1,6 +1,6 @@
 class Player extends Object {
     constructor() {
-        super("player", [new ColliderRectangle(), new PlayerController(), new FireProjectile()]);
+        super("player", [new Camera(true), new ColliderRectangle(), new PlayerController(), new FireProjectile()]);
         this.addTag("player");
     }
 

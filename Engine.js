@@ -2,12 +2,10 @@ const debug = new Debug();
 
 class Engine {
     constructor() {
-        debug.log("Engine.Create: Detecting canvas...");
         this.canvas = document.getElementById('PlayField');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
 
-        debug.log("Engine.Create: Resizing canvas...");
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
@@ -18,17 +16,15 @@ class Engine {
             this.img = this.ctx.createPattern(this.img, "repeat");
         }
 
-        debug.log("Engine.Create: Setting screen boundaries...");
         this.screenLeft = 0;
         this.screenRight = this.canvas.width;
         this.screenTop = 0;
         this.screenBottom = this.canvas.height;
 
-        debug.log("Engine.Create: Setting context offset...");
         this.screenX = 0;
         this.screenY = 0;
+        this.camera = null;
 
-        debug.log("Engine.Create: Adding event listeners: resize...");
         window.addEventListener("resize", (e) => {
             this.ctx.imageSmoothingEnabled = false;
             this.canvas.width = window.innerWidth;
@@ -40,12 +36,10 @@ class Engine {
             this.screenBottom = this.canvas.height;
         });
 
-        debug.log("Engine.Create: Adding event listeners: wheel...");
         this.canvas.addEventListener('wheel', (e) => {
             return;
         });
 
-        debug.log("Engine.Create: Adding event listeners: cursor variables...");
         this.isMouseDown = false;
         this.isDragging = false;
         this.lastMouseX = 0;
@@ -55,7 +49,6 @@ class Engine {
         this.worldSpaceMouseX = 0;
         this.worldSpaceMouseY = 0;
 
-        debug.log("Engine.Create: Adding event listeners: mousedown...");
         this.canvas.addEventListener('mousedown', (e) => {
             e.preventDefault()
             
@@ -70,7 +63,6 @@ class Engine {
             this.isMouseDown = true;
         });
 
-        debug.log("Engine.Create: Adding event listeners: mouseup...");
         this.canvas.addEventListener('mouseup', (e) => {
             e.preventDefault()
             
@@ -85,12 +77,10 @@ class Engine {
             this.isMouseDown = false;
         });
         
-        debug.log("Engine.Create: Adding event listeners: contextmenu...");
         window.addEventListener(`contextmenu`, (e) => {
             e.preventDefault();
         });
 
-        debug.log("Engine.Create: Adding event listeners: mousemove...");
         this.canvas.addEventListener('mousemove', (e) => {
             const inScreenBoundsX = e.clientX >= this.screenLeft && e.clientX <= this.screenRight;
             const inScreenBoundsY = e.clientY >= this.screenTop && e.clientY <= this.screenBottom;
@@ -113,7 +103,6 @@ class Engine {
             this.lastMouseY = e.clientY;
         });
 
-        debug.log("Engine.Create: Adding event listeners: keydown...");
         document.addEventListener('keydown', (e) => {
             if (e.key === 'F3') {
                 debug.debugMode = !debug.debugMode;
@@ -129,7 +118,6 @@ class Engine {
             return;
         });
 
-        debug.log("Engine.Create: Adding event listeners: keyup...");
         document.addEventListener('keyup', (e) => {
             this.scene.forEach(object => {
                 for (const component of object.components) {
@@ -141,26 +129,20 @@ class Engine {
             return;
         });
 
-        debug.log("Engine.Create: Initializing delta times...");
         this.lastUpdateTime = performance.now();
         this.lastFrameTime = performance.now();
         this.smoothFps = [];
 
-        debug.log("Engine.Create: Initializing empty scene...");
         this.scene = [];
     }
 
     start(scene) {
-        debug.log("Engine.Start: Loading scene...");
         this.loadScene(scene);
-        debug.log("Engine.Start: Beginning game loop...");
         this.update();
     }
 
     loadScene(scene) {
-        debug.log("Engine.LoadScene: Obtaining scene objects...");
         this.scene = scene;
-        debug.log("Engine.LoadScene: Processing scene objects...");
         this.scene.forEach(object => {
             if (object.start) {
                 debug.log(`Object.Start: Starting object: ${object.name}...`);
