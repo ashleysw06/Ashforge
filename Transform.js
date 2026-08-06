@@ -24,13 +24,11 @@ class Transform {
 
     update(deltaTime) {
         const transform = this.getGlobalTransform();
-        const lntInView = // Left and Top
-            (Math.abs(transform.position.x - transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2) || 
-            (Math.abs(transform.position.y - transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2);
-        const rnbInView = // Right and Bottom
-            (Math.abs(transform.position.x + transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2) || 
-            (Math.abs(transform.position.y + transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2);
-        this.inView = lntInView || rnbInView;
+        const top = Math.abs(transform.position.y - transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2;
+        const left = Math.abs(transform.position.x - transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2;
+        const bottom = Math.abs(transform.position.y + transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2;
+        const right = Math.abs(transform.position.x + transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2;
+        this.inView = ( top + left + bottom + right ) > 0;
     }
 
     setParent(parent) {
