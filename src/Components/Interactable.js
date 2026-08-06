@@ -29,7 +29,7 @@ export default class Interactable extends Component {
 
     update(deltaTime) {
         this.inRange = false;
-        this.scene.getObjectsByTag(this.tag).forEach(object => {
+        this.scene.getObjectsWithTag(this.tag).forEach(object => {
             if (this.gameObject.distance(object) < this.range) {
                 this.transform.color = 'green';
                 this.inRange = true;
