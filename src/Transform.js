@@ -93,10 +93,10 @@ export default class Transform {
             const parentRotation = this.parent.getGlobalRotation()
             const radians = parentRotation.deg * Math.PI / 180;
             
-            const s = Math.sin(radians);
+            const s = -Math.sin(radians);
             const c = Math.cos(radians);
 
-            const xnew = this.vector2D.position.x * c - this.vector2D.position.y * s;
+            const xnew = this.vector2D.position.x * c + this.vector2D.position.y * s;
             const ynew = -this.vector2D.position.x * s + this.vector2D.position.y * c;
 
             return { 
