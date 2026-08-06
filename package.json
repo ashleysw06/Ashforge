@@ -1,6 +1,6 @@
 {
   "name": "ashforge",
-  "version": "1.0.0",
+  "version": "v0.0.1b",
   "description": "A game engine built in JavaScript for Web based projects. Heavily inspired by Unity's component and transform system.<br> This project is very work in progress. Many system will be rewritten. My current work flow is to get a feature working and leave it alone until it bothers me enough to want to fix.",
   "main": "index.js",
   "scripts": {

@@ -1,24 +1,33 @@
 # Ashforge
 
 ## About
-A game engine built in JavaScript for Web based projects. Heavily inspired by Unity's component and transform system.<br>
+
+A game engine built in JavaScript for Web based projects. Heavily inspired by Unity's component and transform system.
+
 This project is very work in progress. Many system will be rewritten. My current work flow is to get a feature working and leave it alone until it bothers me enough to want to fix.
 
-## Why
-Developed for no greater reason or to solve any problem. Just a personal project to make development of personal projects easier, while working in a codebase I made and understand.
+Version: v0.0.1b
 
-# TODO
+# TODO & GOALS
 An unorganized mostly unfinished list of more or less everything I want to do or fix with this project,
-- Switch everything to module script instead of index script references
-- Engine Components vs User Made Components
-- Make Collider base Component extending or required by Collider Rectangle and Circle.
-- Rigidbody component instead of object to object collisions being built into collisions
+
+- Rigidbody component instead of object to object collisions being built into collisions component 🤯
 - Class options `new Component(options)` for setting variables or other conditions in/used by the component
-- Fix Children objects having inversed X and Y positions to their Parent object
+- UI system ( Panels, Buttons, Controller input / Changing menus with ←↑↓→) ( + Styling system )
+- Audio system
+- (Maybe Fixed?) Fix Children objects having inversed X and Y positions to their Parent object
 - A lot more stuff I'm too lazy too think of right now
+- Optimization ( Currently FPS starts dropping after 250 resources, Reached 30FPS by 500 resources )
+- Expiriment with multiplayer
+- Increase event type support
+- Proper Documentation, Examples and Guide on how to get started
+- Game Enginify ( Game window, Heirarchy, Inspector, Scripting, Exporting, Importing)
+- Fix collisions ( Thinking polygon system for everything )
+- Develop more of the game experience thing
+- Built in Save / Load support
 
 
-# Documentation
+# Documentation ( OUTDATED... PROBABLY )
 A lot of this is subject to change. This is written for now mostly as a placeholder.
 
 ## Getting Started
