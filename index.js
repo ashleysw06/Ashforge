@@ -30,9 +30,26 @@ dummy.addComponent(dummyInteraction);
 dummy.addTag("test");
 scene.addObject( dummy );
 
+
+let parent = new Object();
+parent.name = "dummy";
+parent.transform.vector2D = new Vector2D(50, 0);
+parent.addComponent(new ColliderRectangle());
+parent.addTag("test");
+scene.addObject( parent );
+
+let child = new Object();
+child.name = "dummy";
+child.transform.vector2D = new Vector2D(50, 50);
+child.addComponent(new ColliderRectangle());
+child.addTag("test");
+scene.addObject( child );
+
+parent.transform.addChild(child.transform)
+
 // Resource Generation
 const range = new Vector2D(1000, 1000);
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 10; i++) {
     let res = new Object("recources", [new ColliderCircle(), new Interactable("player"), new ResourceHandler()]);
     res.addTag("resource");
     res.transform.vector2D = new Vector2D(Math.random() * range.x - range.x / 2, Math.random() * range.y - range.y / 2);
