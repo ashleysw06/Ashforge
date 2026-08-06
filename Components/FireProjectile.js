@@ -19,7 +19,6 @@ class FireProjectile extends Component {
     _onMouseDown(event) {
         if (event.button == 0) {
             let projectile = this.createProjectile();
-            console.log(projectile)
             scene.addObject(projectile);
         }
     }
