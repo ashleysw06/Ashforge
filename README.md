@@ -4,13 +4,8 @@
 A game engine built in JavaScript for Web based projects. Heavily inspired by Unity's component and transform system.<br>
 This project is very work in progress. Many system will be rewritten. My current work flow is to get a feature working and leave it alone until it bothers me enough to want to fix.
 
-### Why is it called Ashforge?
-- I go by Ash irl
-- Recognition for ones quality of a craft, made me think of a forge
-    - Could've been ashquilt, ashtinker, ash{craft profession} etc, forge just sounded cooler to me
-
 ## Why
-Developed for no greater reason or to solve any problem. Just a personal project to make development of personal project easier, while working in a codebase I made and understand.
+Developed for no greater reason or to solve any problem. Just a personal project to make development of personal projects easier, while working in a codebase I made and understand.
 
 # TODO
 An unorganized mostly unfinished list of more or less everything I want to do or fix with this project,
