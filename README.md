@@ -59,6 +59,7 @@ class ComponentName extends Component {
 ## Prefabs & Objects
 
 Objects extend the Object class, which gives many usefull functions.
+
 ```js
 class ObjectName extends Object {
     constructor() {
@@ -70,7 +71,26 @@ class ObjectName extends Object {
 }
 ```
 
+Or define a new object as an `Object`
+
+```js
+let object = new Object();
+object.name = "Object";
+object.addTag("object");
+
+object.transform.vector2D = new Vector2D(-50, 0);
+
+object.addComponent(new ColliderRectangle());
+
+const interactableComponent = new Interactable("player");
+interactableComponent.onInteraction((e) => {
+    console.log(e);
+})
+object.addComponent(interactableComponent);
+
+scene.addObject( dummy );
+```
+
 ## The Scene
 
-`scene.addObject( new ObjectClassName() );`
-`scene` can be found inside the game class
+`scene.addObject( new ObjectClassName() );` - Adds an object to the Scene
