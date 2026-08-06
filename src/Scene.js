@@ -13,7 +13,7 @@ export default class Scene {
     }
     
     getObjectsWithoutTag(tag) {
-        return this.objects.filter(object => object.tags.indexOf(tag) > -1);
+        return this.objects.filter(object => object.tags.indexOf(tag) == -1);
     }
 
     addObject(object) {
