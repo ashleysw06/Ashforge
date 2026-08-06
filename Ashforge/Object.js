@@ -1,4 +1,6 @@
-class Object {
+import { Transform } from './Transform.js';
+
+export class Object {
     constructor(name, components) {
         this.name = name;
         this.tags = [];

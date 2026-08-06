@@ -1,4 +1,4 @@
-class Component {
+export class Component {
     constructor(name) {
         this.name = name;
         this.gameObject = null;

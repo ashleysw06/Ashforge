@@ -1,5 +1,6 @@
-// Base Class. For reference. May or may not ship with engine
-class Empty extends Component {
+import { Component } from './Component.js';
+
+export class Empty extends Component {
     constructor() {
         super('ComponentName');
     }

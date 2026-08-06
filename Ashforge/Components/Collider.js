@@ -1,4 +1,6 @@
-class Collider extends Component {
+import { Component } from './Component.js';
+
+export class Collider extends Component {
     constructor() {
         super('Collider');
         this.type = "undef"

@@ -1,4 +1,10 @@
-class Transform {
+import { Vector2D } from './Vector2D.js';
+import { Scale2D } from './Scale2D.js';
+import { Rotation2D } from './Rotation2D.js';
+
+export { Vector2D, Scale2D, Rotation2D }
+
+export class Transform {
     constructor(position, scale, rotation) {
         this.defaultScale = 5; // TODO: fix to not need this... something something to do with parent child scaling/decaying exponentially
         this.vector2D = new Vector2D(position?.x ?? 0, position?.y ?? 0);

@@ -1,5 +1,7 @@
-// Expirimental Class. For testing. Won't ship with engine outside of Examples... Without heavy redesign and more general use
-class PlayerController extends Component {
+import { Component } from './Component.js';
+import { Vector2D } from './../Transform.js';
+
+export class PlayerController extends Component {
     constructor() {
         super('PlayerController');
 

@@ -1,5 +1,8 @@
-// Expirimental Class. For testing. Won't ship with engine outside of Examples
-class ResourceHandler extends Component {
+import { Component } from '../Ashforge/Engine.js';
+import { Transform, Vector2D, Scale2D, Rotation2D } from '../Ashforge/Transform.js';
+import { Object } from '../Ashforge/Object.js';
+
+export class ResourceHandler extends Component {
     constructor() {
         super('ResourceHandler');
         this.requireComponent("Collider");
@@ -28,11 +31,13 @@ class ResourceHandler extends Component {
 
                 
                 const position = this.transform.vector2D.clone();
-                let projectile = new Projectile(position, new Vector2D(position.x, position.y - 100));
-                projectile.removeComponent("Collider")
+                const controller = new ProjectileController(position, new Vector2D(position.x, position.y - 100));
+                controller.speed = 150
+                controller.range = 150
+
+                let projectile = new Object("projectile", [controller]);
+                projectile.addTag("projectile");
                 projectile.transform.vector2D = position;
-                projectile.getComponent("ProjectileController").speed = 150
-                projectile.getComponent("ProjectileController").range = 150
                 projectile.draw = (ctx) => {
                     ctx.rotate(-projectile.transform.rotation2D.getRotRad());
                     const size = 8

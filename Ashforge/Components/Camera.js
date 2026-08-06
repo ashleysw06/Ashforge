@@ -1,7 +1,11 @@
-class Camera extends Component {
-    constructor(isMain = false) {
+import { Component } from './Component.js';
+import { Vector2D } from './../Transform.js';
+
+export class Camera extends Component {
+    constructor(engine, isMain = false) {
         super('Camera');
 
+        this.engine = engine;
         this.isMain = isMain;
 
         this.target = new Vector2D(0, 0);
@@ -22,7 +26,7 @@ class Camera extends Component {
         super.start()
 
         if (this.isMain) {
-            engine.camera = this;
+            this.engine.camera = this;
         }
 
         if (this.transform) {
@@ -31,11 +35,11 @@ class Camera extends Component {
     }
 
     update(deltaTime) {
-        if (engine.camera != this) return;
+        if (this.engine.camera != this) return;
 
         if (this.isOverwritten) {
-            engine.screenX = this.position.x;
-            engine.screenY = this.position.y;
+            this.engine.screenX = this.position.x;
+            this.engine.screenY = this.position.y;
             return;
         }
         switch (this.followMode) {
@@ -54,8 +58,8 @@ class Camera extends Component {
                 break;
         }
         
-        engine.screenX = this.position.x;
-        engine.screenY = this.position.y;
+        this.engine.screenX = this.position.x;
+        this.engine.screenY = this.position.y;
 
         return;
 

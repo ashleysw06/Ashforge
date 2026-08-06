@@ -1,4 +1,4 @@
-class Scale2D {
+export class Scale2D {
     constructor(x, y) {
         this.scale = { x: x, y: y };
     }

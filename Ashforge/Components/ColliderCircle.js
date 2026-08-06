@@ -1,4 +1,6 @@
-class ColliderCircle extends Collider {
+import { Collider } from './Collider.js';
+
+export class ColliderCircle extends Collider {
     constructor() {
         super('Collider');
         this.type = "circle";

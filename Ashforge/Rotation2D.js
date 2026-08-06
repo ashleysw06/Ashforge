@@ -1,4 +1,4 @@
-class Rotation2D {
+export class Rotation2D {
     constructor(rot) {
         this.rotation = { rot: rot };
     }

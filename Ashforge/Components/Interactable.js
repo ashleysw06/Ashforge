@@ -1,4 +1,6 @@
-class Interactable extends Component {
+import { Component } from './Component.js';
+
+export class Interactable extends Component {
     constructor(tag) {
         super('Interactable');
         this.requireComponent("Collider");

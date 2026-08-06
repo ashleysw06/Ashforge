@@ -1,6 +1,8 @@
-const debug = new Debug();
+import { Object } from './Object.js';
+export * as Components from './Components/CModules.js';
+export { Component } from './Components/Component.js';
 
-class Engine {
+export class Engine {
     constructor() {
         this.canvas = document.getElementById('PlayField');
         this.ctx = this.canvas.getContext('2d');
@@ -105,7 +107,7 @@ class Engine {
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'F3') {
-                debug.debugMode = !debug.debugMode;
+                this.debug = !this.debug;
             }
 
             this.scene.forEach(object => {
@@ -129,6 +131,8 @@ class Engine {
             return;
         });
 
+        this.debug = false;
+
         this.lastUpdateTime = performance.now();
         this.lastFrameTime = performance.now();
         this.smoothFps = [];
@@ -145,7 +149,6 @@ class Engine {
         this.scene = scene;
         this.scene.forEach(object => {
             if (object.start) {
-                debug.log(`Object.Start: Starting object: ${object.name}...`);
                 object.start();
             }
         });
@@ -192,16 +195,13 @@ class Engine {
             const transform = object.transform.getGlobalTransform()
             if (!object.transform.inView) return;
             this.ctx.save();
-            // this.ctx.translate(object.transform.vector2D.position.x, object.transform.vector2D.position.y);
-            // this.ctx.rotate(object.transform.rotation2D.getRotRad());
-            // this.ctx.scale(object.transform.scale2D.scale.x, object.transform.scale2D.scale.y);
 
             this.ctx.translate(transform.position.x, transform.position.y);
             this.ctx.rotate(transform.rotation.rot);
             this.ctx.scale(transform.scale.x, transform.scale.y);
 
             object.draw(this.ctx);
-            if (debug.debugMode) {
+            if (this.debug) {
                 if (object.transform) {
                     object.transform.draw(this.ctx);
                 }
@@ -211,7 +211,7 @@ class Engine {
         this.drawCursor();
         this.ctx.restore();
 
-        if (debug.debugMode && this.isDragging) {
+        if (this.debug && this.isDragging) {
             this.ctx.beginPath();
             this.ctx.strokeStyle = 'red'
             this.ctx.moveTo(this.lastMouseX, this.lastMouseY);
