@@ -14,6 +14,8 @@ export default class Collider extends Component {
         
         this.callbacks = [];
         this.ignoredTags = [];
+
+        window._temps.colliderIndex = 0
     }
 
     update(deltaTime) {
@@ -47,7 +49,10 @@ export default class Collider extends Component {
     }
 
     forEachObject(script) {
-        this.scene.objects.forEach(object => {
+        const objects = this.scene.getObjectsWithoutTags(this.ignoredTags)
+        for (let i = window._temps.colliderIndex + 1; i < objects.length; i++) {
+            const object = objects[i];
+
             if (object.instanceID == this.gameObject.instanceID) return;
             for (let i = 0; i < object.tags.length; i++) {
                 const tag = object.tags[i];
@@ -69,25 +74,13 @@ export default class Collider extends Component {
                     script(object, {objTransform, objCollider, closestPoint});
                 }
             }
-        });
-    }
-
-    intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
-        if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) return false;
-
-        const denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
-
-        if (denominator === 0) return false; // Lines are parallel
-
-        let ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator
-        let ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
-
-        if (ua < 0 || ua > 1 || ub < 0 || ub > 1) return false; // is the intersection along the segments
-
-        let x = x1 + ua * (x2 - x1)
-        let y = y1 + ua * (y2 - y1)
-
-        return { x, y }
+        }
+        
+        if (window._temps.colliderIndex < objects.length) {
+            window._temps.colliderIndex++;
+            return;
+        }
+        window._temps.colliderIndex = 0;
     }
 
     // TODO: get from class: (transform, type = "sqaure") -> (collider): collider.getClosestPoint(x, y)
@@ -110,21 +103,19 @@ export default class Collider extends Component {
                 break;
                 
             case "rectangle":
-                // const point = new Vector2D(this.x, this.y) // Point of this object
-                // const objPoint = new Vector2D(transform.position.x, transform.position.y); // Point of other object
-                // for (let i = 0; i < collider.points.length; i++) {
-                //     const linePointA = collider.points[i].clone()
-                //     const linePointB = collider.points[(i + 1) % collider.points.length].clone() // % x loops back so last point and first point can connect
+                const point = new Vector2D(this.x, this.y) // Point of this object
+                const objPoint = new Vector2D(transform.position.x, transform.position.y); // Point of other object
 
-                //     //if ( objPoint.x, objPoint.y )
-                //     // closestPoint = linePointA;
-                    
+                let closestDist = Infinity;
+                for (let i = 0; i < collider.points.length; i++) {
+                    const cornerPoint = collider.points[i].clone()
 
-                //     // const intersect = this.intersect(point.x, point.y, objPoint.x, objPoint.y, linePointA.x, linePointA.y, linePointB.x, linePointB.y)
-                //     // if (intersect) {
-                //     //     closestPoint = intersect;
-                //     // }
-                // }
+                    const dist = Math.sqrt(Math.pow(cornerPoint.x - objPoint.x, 2) + Math.pow(cornerPoint.y - objPoint.y, 2));
+                    if (dist < closestDist) {
+                        closestDist = dist
+                        closestPoint = cornerPoint;
+                    }
+                }
                 break;
         
             default:
