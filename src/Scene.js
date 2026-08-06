@@ -1,4 +1,4 @@
-export class Scene {
+export default class Scene {
     constructor() {
         this.objects = [];
         this.queue = [];
@@ -15,7 +15,8 @@ export class Scene {
     addObject(object) {
         object.transform.scene = this;
         object.scene = this;
-        object.start();
+        
+        if (window._gov.isRunning) object.start();
         
         this.objects.push(object);
     }

@@ -1,11 +1,14 @@
-import { Object } from './Object.js';
-export * as Components from './Components/CModules.js';
-export { Component } from './Components/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+import Object from '/src/Object.js';
 
-export class Engine {
-    constructor() {
-        this.canvas = document.getElementById('PlayField');
-        this.ctx = this.canvas.getContext('2d');
+window._gov = {
+    isRunning: false
+};
+
+export default class Engine {
+    constructor(canvas, ctx) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
 
         this.canvas.width = window.innerWidth;
@@ -48,13 +51,11 @@ export class Engine {
         this.lastMouseY = 0;
         this.lastMouseDragX = 0;
         this.lastMouseDragY = 0;
-        this.worldSpaceMouseX = 0;
-        this.worldSpaceMouseY = 0;
 
         this.canvas.addEventListener('mousedown', (e) => {
             e.preventDefault()
             
-            this.scene.forEach(object => {
+            this.scene.objects.forEach(object => {
                 for (const component of object.components) {
                     if (component._onMouseDown) {
                         component._onMouseDown(e);
@@ -68,7 +69,7 @@ export class Engine {
         this.canvas.addEventListener('mouseup', (e) => {
             e.preventDefault()
             
-            this.scene.forEach(object => {
+            this.scene.objects.forEach(object => {
                 for (const component of object.components) {
                     if (component._onMouseUp) {
                         component._onMouseUp(e);
@@ -91,9 +92,6 @@ export class Engine {
                 return;
             }
             
-            // this.worldSpaceMouseX = e.clientX - (this.screenRight / 2 - this.screenX);
-            // this.worldSpaceMouseY = e.clientY - (this.screenBottom / 2 - this.screenY);
-            
             if (this.isMouseDown) {
                 this.isDragging = true
                 this.lastMouseDragX = e.clientX;
@@ -110,7 +108,7 @@ export class Engine {
                 this.debug = !this.debug;
             }
 
-            this.scene.forEach(object => {
+            this.scene.objects.forEach(object => {
                 for (const component of object.components) {
                     if (component._onKeyDown) {
                         component._onKeyDown(e);
@@ -121,7 +119,7 @@ export class Engine {
         });
 
         document.addEventListener('keyup', (e) => {
-            this.scene.forEach(object => {
+            this.scene.objects.forEach(object => {
                 for (const component of object.components) {
                     if (component._onKeyUp) {
                         component._onKeyUp(e);
@@ -131,7 +129,7 @@ export class Engine {
             return;
         });
 
-        this.debug = false;
+        this.debug = true;
 
         this.lastUpdateTime = performance.now();
         this.lastFrameTime = performance.now();
@@ -147,7 +145,7 @@ export class Engine {
 
     loadScene(scene) {
         this.scene = scene;
-        this.scene.forEach(object => {
+        this.scene.objects.forEach(object => {
             if (object.start) {
                 object.start();
             }
@@ -157,16 +155,50 @@ export class Engine {
     update() {
         const currentTime = performance.now();
         const deltaTime = (currentTime - this.lastUpdateTime) / 1000;
-        
-        this.worldSpaceMouseX = (this.isDragging ? this.lastMouseDragX : this.lastMouseX) - (this.screenRight / 2 - this.screenX);
-        this.worldSpaceMouseY = (this.isDragging ? this.lastMouseDragY : this.lastMouseY) - (this.screenBottom / 2 - this.screenY);
 
-        this.scene.forEach(object => {
+        const mouseX = (this.isDragging ? this.lastMouseDragX : this.lastMouseX);
+        const mouseY = (this.isDragging ? this.lastMouseDragY : this.lastMouseY);
+        const worldMouseX = mouseX - (this.screenRight / 2 - this.screenX);
+        const worldMouseY = mouseY - (this.screenBottom / 2 - this.screenY);
+
+        window._mouse = {
+            isDragging: this.isDragging,
+            isMouseDown: this.isMouseDown,
+            screen: {
+                x: mouseX,
+                y: mouseY,
+                lastX: this.lastMouseX,
+                lastY: this.lastMouseY,
+                dragX: this.lastMouseDragX,
+                dragY: this.lastMouseDragY
+            },
+            world: {
+                x: worldMouseX,
+                y: worldMouseY
+            }
+        };
+
+        window._screen = {
+            left: this.screenLeft,
+            right: this.screenRight,
+            top: this.screenTop,
+            bottom: this.screenBottom,
+            x: this.screenX,
+            y: this.screenY
+        };
+        
+        this.scene.objects.forEach(object => {
             if (object.update) {
                 object.transform.update(deltaTime);
                 object.update(deltaTime);
             }
         });
+
+        window._gov = {
+            engine: this,
+            scene: this.scene,
+            isRunning: true
+        };
 
         this.draw();
         this.drawFps(deltaTime);
@@ -177,21 +209,23 @@ export class Engine {
     }
 
     draw() {
+        const mouse = window._mouse;
+        const screen = window._screen;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.scene.sort((a, b) => a.transform.vector2D.position.y - b.transform.vector2D.position.y);
+        this.scene.objects.sort((a, b) => a.transform.vector2D.position.y - b.transform.vector2D.position.y);
         this.ctx.save();
         // Removed if (game)
         this.ctx.translate(
-            -this.screenX + this.screenRight / 2,
-            -this.screenY + this.screenBottom / 2
+            -screen.x + screen.right / 2,
+            -screen.y + screen.bottom / 2
         );
         
         this.ctx.fillStyle = this.img;
-        this.ctx.fillRect(this.screenX - this.screenRight / 2, this.screenY - this.screenBottom / 2, this.screenRight, this.screenBottom);
+        this.ctx.fillRect(screen.x - screen.right / 2, screen.y - screen.bottom / 2, screen.right, screen.bottom);
 
         this.ctx.fillStyle = 'black';
-        this.scene.forEach(object => {
+        this.scene.objects.forEach(object => {
             const transform = object.transform.getGlobalTransform()
             if (!object.transform.inView) return;
             this.ctx.save();
@@ -214,8 +248,8 @@ export class Engine {
         if (this.debug && this.isDragging) {
             this.ctx.beginPath();
             this.ctx.strokeStyle = 'red'
-            this.ctx.moveTo(this.lastMouseX, this.lastMouseY);
-            this.ctx.lineTo(this.lastMouseDragX, this.lastMouseDragY);
+            this.ctx.moveTo(mouse.screen.lastX, mouse.screen.lastY);
+            this.ctx.lineTo(mouse.screen.dragX, mouse.screen.dragY);
             this.ctx.stroke();
         }
     }
@@ -237,9 +271,10 @@ export class Engine {
     }
 
     drawCursor() {
+        const mouse = window._mouse.world;
         this.ctx.fillStyle = 'black';
         this.ctx.save();
-        this.ctx.translate(this.worldSpaceMouseX, this.worldSpaceMouseY);
+        this.ctx.translate(mouse.x, mouse.y);
         this.ctx.fillRect(-5, -5, 10, 10);
         this.ctx.restore();
     }

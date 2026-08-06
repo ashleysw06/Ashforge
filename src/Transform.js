@@ -1,10 +1,10 @@
-import { Vector2D } from './Vector2D.js';
-import { Scale2D } from './Scale2D.js';
-import { Rotation2D } from './Rotation2D.js';
+import Vector2D from './Vector2D.js';
+import Scale2D from './Scale2D.js';
+import Rotation2D from './Rotation2D.js';
 
 export { Vector2D, Scale2D, Rotation2D }
 
-export class Transform {
+export default class Transform {
     constructor(position, scale, rotation) {
         this.defaultScale = 5; // TODO: fix to not need this... something something to do with parent child scaling/decaying exponentially
         this.vector2D = new Vector2D(position?.x ?? 0, position?.y ?? 0);
@@ -29,11 +29,14 @@ export class Transform {
     }
 
     update(deltaTime) {
+        const screen = window._screen;
         const transform = this.getGlobalTransform();
-        const top = Math.abs(transform.position.y - transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2;
-        const left = Math.abs(transform.position.x - transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2;
-        const bottom = Math.abs(transform.position.y + transform.scale.x * 2 - engine.screenY) < engine.screenBottom / 2;
-        const right = Math.abs(transform.position.x + transform.scale.x * 2 - engine.screenX) < engine.screenRight / 2;
+
+        const top = Math.abs(transform.position.y - transform.scale.x * 2 - screen.y) < screen.bottom / 2;
+        const left = Math.abs(transform.position.x - transform.scale.x * 2 - screen.x) < screen.right / 2;
+        const bottom = Math.abs(transform.position.y + transform.scale.x * 2 - screen.y) < screen.bottom / 2;
+        const right = Math.abs(transform.position.x + transform.scale.x * 2 - screen.x) < screen.right / 2;
+        
         this.inView = ( top + left + bottom + right ) > 0;
     }
 
@@ -93,12 +96,12 @@ export class Transform {
             const s = Math.sin(radians);
             const c = Math.cos(radians);
 
-            const xnew = -this.vector2D.position.x * c - this.vector2D.position.y * s;
-            const ynew = -this.vector2D.position.x * s + this.vector2D.position.y * c;
+            const xnew = -this.position.x * c - this.position.y * s;
+            const ynew = -this.position.x * s + this.position.y * c;
 
             return { 
-                x: xnew + parentPosition.x, 
-                y: ynew + parentPosition.y 
+                x: -xnew + parentPosition.x, 
+                y: -ynew + parentPosition.y 
             };
         }
         return { 

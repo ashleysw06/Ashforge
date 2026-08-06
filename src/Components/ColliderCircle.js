@@ -1,6 +1,8 @@
-import { Collider } from './Collider.js';
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+import Collider from '/src/Components/Collider.js';
 
-export class ColliderCircle extends Collider {
+export default class ColliderCircle extends Collider {
     constructor() {
         super('Collider');
         this.type = "circle";

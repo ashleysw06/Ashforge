@@ -1,15 +1,15 @@
-import { Engine } from './Ashforge/Engine.js';
-import { Scene } from './Ashforge/Scene.js';
-import { Transform, Vector2D, Scale2D, Rotation2D } from './Ashforge/Transform.js';
-import { Object } from './Ashforge/Object.js';
+import Engine from '/src/Engine.js';
+import Scene from '/src/Scene.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+import Object from '/src/Object.js';
 
-import { Camera, Collider, ColliderCircle, ColliderRectangle, Interactable, PlayerController } from './Ashforge/Components/CModules.js';
+import { Camera, Collider, ColliderCircle, ColliderRectangle, Interactable, PlayerController } from '/src/Components/_ModuleImports.js';
 
-import { FireProjectile } from './scripts/FireProjectile.js';
-import { ProjectileController } from './scripts/ProjectileController.js';
-import { ResourceHandler } from './scripts/ResourceHandler.js';
+import FireProjectile from '/scripts/FireProjectile.js';
+import ProjectileController from '/scripts/ProjectileController.js';
+import ResourceHandler from '/scripts/ResourceHandler.js';
 
-const engine = new Engine();
+const engine = new Engine(document.getElementById('PlayField'));
 const scene = new Scene();
 
 // Player
@@ -26,7 +26,6 @@ const dummyInteraction = new Interactable("player");
 dummyInteraction.onInteraction((e) => {
     console.log(e);
 })
-console.log(dummyInteraction);
 dummy.addComponent(dummyInteraction);
 dummy.addTag("test");
 scene.addObject( dummy );
@@ -42,7 +41,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 // Start Engine
-engine.start(scene.objects);
+engine.start(scene);
 
 // Debugging
 console.log(engine);

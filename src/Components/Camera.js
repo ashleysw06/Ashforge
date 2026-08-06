@@ -1,7 +1,7 @@
-import { Component } from './Component.js';
-import { Vector2D } from './../Transform.js';
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
 
-export class Camera extends Component {
+export default class Camera extends Component {
     constructor(engine, isMain = false) {
         super('Camera');
 
@@ -13,7 +13,8 @@ export class Camera extends Component {
 
         this.followTypes = {
             INSTANT: 1,
-            CHASE: 1
+            CHASE: 2,
+            SMOOTH_IN: 3
         }
 
         this.followMode = this.followTypes.INSTANT
@@ -51,7 +52,10 @@ export class Camera extends Component {
                 this.position.y = this.target.position.y;
                 break;
             case this.followTypes.CHASE:
-                // Too Implement... Too lazy rn
+                // TODO: Implement... Too lazy rn
+                break;
+            case this.followTypes.SMOOTH_IN:
+                // TODO: Implement... Too lazy rn
                 break;
         
             default:

@@ -1,7 +1,7 @@
-import { Component } from './Component.js';
-import { Vector2D } from './../Transform.js';
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
 
-export class PlayerController extends Component {
+export default class PlayerController extends Component {
     constructor() {
         super('PlayerController');
 
@@ -23,10 +23,10 @@ export class PlayerController extends Component {
     }
 
     update(deltaTime) {
-        super.update(deltaTime);
+        const mouse = window._mouse.world;
 
-        const xDistance = this.transform.position.x - engine.worldSpaceMouseX;
-        const yDistance = this.transform.position.y - engine.worldSpaceMouseY;
+        const xDistance = this.transform.position.x - mouse.x;
+        const yDistance = this.transform.position.y - mouse.y;
         const angle = Math.atan2(yDistance, xDistance) * (180 / Math.PI);
         this.transform.rotation2D.setRotDeg(angle);
 

@@ -1,6 +1,7 @@
-import { Component } from '../Ashforge/Engine.js';
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
 
-export class ProjectileController extends Component {
+export default class ProjectileController extends Component {
     constructor(originPoint, targetPoint) {
         super('ProjectileController');
 
@@ -14,12 +15,12 @@ export class ProjectileController extends Component {
     update(deltaTime) {
         super.update(deltaTime);
         
-        const tDistance = Math.sqrt( 
+        const DistToTravek = Math.sqrt( 
             Math.pow(this.transform.vector2D.position.x - this.originPoint.position.x, 2) + 
             Math.pow(this.transform.vector2D.position.y - this.originPoint.position.y, 2) 
         )
 
-        if (this.range && tDistance > this.range) {
+        if (this.range && DistToTravek > this.range) {
             this.gameObject.destroy();
             return;
         }

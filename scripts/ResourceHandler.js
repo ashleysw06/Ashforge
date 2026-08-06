@@ -1,8 +1,10 @@
-import { Component } from '../Ashforge/Engine.js';
-import { Transform, Vector2D, Scale2D, Rotation2D } from '../Ashforge/Transform.js';
-import { Object } from '../Ashforge/Object.js';
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
+import Object from '/src/Object.js';
 
-export class ResourceHandler extends Component {
+import ProjectileController from './ProjectileController.js';
+
+export default class ResourceHandler extends Component {
     constructor() {
         super('ResourceHandler');
         this.requireComponent("Collider");
@@ -25,7 +27,7 @@ export class ResourceHandler extends Component {
 
         const interaction = this.gameObject.getComponent("Interactable");
         interaction.onInteraction((e) => {
-            if (e.action == "click" && e.mouse == 1) {
+            if (e.action == "click" && e.subAction == "mouseDown" && e.mouse == 1) {
                 this.health -= 1;
                 this.flash = 0.75;
 

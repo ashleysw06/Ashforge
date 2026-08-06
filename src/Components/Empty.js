@@ -1,6 +1,7 @@
-import { Component } from './Component.js';
+import Component from '/src/Component.js';
+import Transform, { Vector2D, Scale2D, Rotation2D } from '/src/Transform.js';
 
-export class Empty extends Component {
+export default class Empty extends Component {
     constructor() {
         super('ComponentName');
     }
