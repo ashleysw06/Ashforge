@@ -87,21 +87,31 @@ export default class Transform {
         };
     }
 
-    getGlobalPosition() {
+    getRotatedPosition() {
+        let x = this.vector2D.position.x;
+        let y = this.vector2D.position.y;
         if (this.parent) {
-            const parentPosition = this.parent.getGlobalPosition()
             const parentRotation = this.parent.getGlobalRotation()
             const radians = parentRotation.deg * Math.PI / 180;
             
             const s = -Math.sin(radians);
             const c = Math.cos(radians);
 
-            const xnew = this.vector2D.position.x * c + this.vector2D.position.y * s;
-            const ynew = -this.vector2D.position.x * s + this.vector2D.position.y * c;
+            x = this.vector2D.position.x * c + this.vector2D.position.y * s;
+            y = -this.vector2D.position.x * s + this.vector2D.position.y * c;
+        }
+
+        return new Vector2D(x, y)
+    }
+
+    getGlobalPosition() {
+        if (this.parent) {
+            const parentPosition = this.parent.getGlobalPosition()
+            const relativePosition = this.getRotatedPosition();
 
             return { 
-                x: xnew + parentPosition.x, 
-                y: ynew + parentPosition.y 
+                x: relativePosition.x + parentPosition.x, 
+                y: relativePosition.y + parentPosition.y 
             };
         }
         return { 
