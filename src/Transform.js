@@ -107,11 +107,12 @@ export default class Transform {
     getGlobalPosition() {
         if (this.parent) {
             const parentPosition = this.parent.getGlobalPosition()
+            const parentScale = this.parent.getGlobalScale()
             const relativePosition = this.getRotatedPosition();
 
             return { 
-                x: relativePosition.x + parentPosition.x, 
-                y: relativePosition.y + parentPosition.y 
+                x: relativePosition.x * parentScale.x / this.defaultScale + parentPosition.x, 
+                y: relativePosition.y * parentScale.y / this.defaultScale + parentPosition.y 
             };
         }
         return { 
