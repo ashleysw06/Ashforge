@@ -25,6 +25,19 @@ dummy.addComponent(new ColliderRectangle());
 const dummyInteraction = new Interactable("player");
 dummyInteraction.onInteraction((e) => {
     console.log(e);
+    
+    if (e.key == "e")
+        player.transform.addChild(parent.transform)
+    
+    if (e.subAction == "mouseUp") {
+        parent.transform.scale.x *= 0.5
+        parent.transform.scale.y *= 0.5
+    }
+    
+    if (e.subAction == "mouseDown") {
+        parent.transform.scale.x *= 2
+        parent.transform.scale.y *= 2
+    }
 })
 dummy.addComponent(dummyInteraction);
 dummy.addTag("test");
@@ -33,7 +46,7 @@ scene.addObject( dummy );
 
 let parent = new Object();
 parent.name = "dummy";
-parent.transform.vector2D = new Vector2D(50, 0);
+parent.transform.vector2D = new Vector2D(100, 0);
 parent.addComponent(new ColliderRectangle());
 parent.addTag("test");
 scene.addObject( parent );
@@ -46,6 +59,10 @@ child.addTag("test");
 scene.addObject( child );
 
 parent.transform.addChild(child.transform)
+
+setInterval(() => {
+    parent.transform.rotation2D.rotateDeg(360 / 4 / 120)
+},1000 / 30)
 
 // Resource Generation
 const range = new Vector2D(1000, 1000);
